@@ -33,7 +33,11 @@ export function InviteGuestsStep({
 
       <div className="w-px h-6 bg-zinc-800" />
 
-      <Button onClick={openConfirmTripModal} variant="primary">
+      <Button
+        onClick={openConfirmTripModal}
+        disabled={emailsToInvite.length === 0}
+        variant="primary"
+      >
         Confirm trip
         <ArrowRight className="size-5 text-lime-950" />
       </Button>

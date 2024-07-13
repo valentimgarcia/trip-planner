@@ -19,17 +19,22 @@ interface DestinationAndDateStepProps {
   isGuestsInputOpen: boolean;
   closeGuestsInput: () => void;
   openGuestsInput: () => void;
+  destination: string;
+  setDestination: (destination: string) => void;
+  startAndEndDates: DateRange | undefined;
+  setStartAndEndDates: (dates: DateRange | undefined) => void;
 }
 
 export function DestinationAndDateStep({
   isGuestsInputOpen,
   closeGuestsInput,
   openGuestsInput,
+  destination,
+  setDestination,
+  startAndEndDates,
+  setStartAndEndDates,
 }: DestinationAndDateStepProps) {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const [startAndEndDates, setStartAndEndDates] = useState<
-    DateRange | undefined
-  >();
 
   function openDatePicker() {
     setIsDatePickerOpen(true);
@@ -47,6 +52,10 @@ export function DestinationAndDateStep({
         )}`
       : null;
 
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
   return (
     <div className="h-16 bg-zinc-900 px-4 rounded-xl flex items-center shadow-shape gap-3">
       <div className="flex items-center gap-2 flex-1">
@@ -56,6 +65,7 @@ export function DestinationAndDateStep({
           placeholder="Where are you going?"
           className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
           disabled={isGuestsInputOpen}
+          onChange={(event) => setDestination(event.target.value)}
         />
       </div>
 
@@ -85,6 +95,7 @@ export function DestinationAndDateStep({
               mode="range"
               selected={startAndEndDates}
               onSelect={setStartAndEndDates}
+              fromDate={tomorrow}
             />
           </div>
         </div>
@@ -98,7 +109,11 @@ export function DestinationAndDateStep({
           <Settings2 className="size-5" />
         </Button>
       ) : (
-        <Button onClick={openGuestsInput} variant="primary">
+        <Button
+          onClick={openGuestsInput}
+          disabled={destination.length <= 3}
+          variant="primary"
+        >
           Continue
           <ArrowRight className="size-5 text-lime-950" />
         </Button>
