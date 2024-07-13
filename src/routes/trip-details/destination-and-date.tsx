@@ -19,7 +19,7 @@ export function DestinationAndDate() {
 
         <Button variant="secondary">
           <Settings2 className="size-5" />
-          Change location/date
+          Change place/date
         </Button>
       </div>
     </div>
