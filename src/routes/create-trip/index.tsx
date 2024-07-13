@@ -158,7 +158,9 @@ export default function CreateTripPage() {
         <ConfirmTripModal
           closeConfirmTripModal={closeConfirmTripModal}
           createTrip={createTrip}
+          ownerName={ownerName}
           setOwnerName={setOwnerName}
+          ownerEmail={ownerEmail}
           setOwnerEmail={setOwnerEmail}
         />
       )}

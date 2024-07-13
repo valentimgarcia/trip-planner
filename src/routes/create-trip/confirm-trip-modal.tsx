@@ -5,6 +5,8 @@ import { Button } from "../../components/button";
 interface ConfirmTripModalProps {
   closeConfirmTripModal: () => void;
   createTrip: (event: FormEvent<HTMLFormElement>) => void;
+  ownerName: string;
+  ownerEmail: string;
   setOwnerName: (ownerName: string) => void;
   setOwnerEmail: (ownerEmail: string) => void;
 }
@@ -12,7 +14,9 @@ interface ConfirmTripModalProps {
 export function ConfirmTripModal({
   closeConfirmTripModal,
   createTrip,
+  ownerName,
   setOwnerName,
+  ownerEmail,
   setOwnerEmail,
 }: ConfirmTripModalProps) {
   return (
@@ -59,7 +63,12 @@ export function ConfirmTripModal({
             />
           </div>
 
-          <Button type="submit" variant="primary" size="full">
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={!ownerName || !ownerEmail}
+            size="full"
+          >
             Confirm trip creation
           </Button>
         </form>
