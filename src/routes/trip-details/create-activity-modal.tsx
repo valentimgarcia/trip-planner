@@ -1,32 +1,42 @@
+import { addHours, endOfDay } from "date-fns";
 import { Calendar, Tag, X } from "lucide-react";
-import { Button } from "../../components/button";
-import { FormEvent } from "react";
-import { api } from "../../lib/axios";
+import { FormEvent, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Button } from "../../components/button";
+import { api } from "../../lib/axios";
 
 interface CreateActivityModalProps {
   closeCreateActivityModal: () => void;
+  starts_at?: string;
+  ends_at?: string;
 }
 
 export function CreateActivityModal({
   closeCreateActivityModal,
+  starts_at,
+  ends_at,
 }: CreateActivityModalProps) {
   const { tripId } = useParams();
+  const [title, setTitle] = useState("");
+  const [occursAt, setOccursAt] = useState("");
 
   async function createActivity(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const data = new FormData(event.currentTarget);
-    const title = data.get("title")?.toString();
-    const occurs_at = data.get("occurs_at")?.toString();
-
     await api.post(`/trips/${tripId}/activities`, {
       title,
-      occurs_at,
+      occurs_at: occursAt,
     });
 
     window.document.location.reload();
   }
+
+  const minCalendarDate = addHours(starts_at || "", 1)
+    .toISOString()
+    .slice(0, -8);
+  const maxCalendarDate = addHours(endOfDay(ends_at || ""), 1)
+    .toISOString()
+    .slice(0, -8);
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
@@ -48,6 +58,8 @@ export function CreateActivityModal({
               type="text"
               name="title"
               placeholder="What is the activity?"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
             />
           </div>
@@ -56,13 +68,21 @@ export function CreateActivityModal({
             <Calendar className="size-5 text-zinc-400" />
             <input
               type="datetime-local"
+              min={minCalendarDate}
+              max={maxCalendarDate}
               name="occurs_at"
               placeholder="Date and time of activity"
+              value={occursAt}
+              onChange={(e) => setOccursAt(e.target.value)}
               className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
             />
           </div>
 
-          <Button variant="primary" size="full">
+          <Button
+            variant="primary"
+            size="full"
+            disabled={!title || title.length < 4 || !occursAt}
+          >
             Save activity
           </Button>
         </form>

@@ -20,10 +20,8 @@ export default function CreateTripPage() {
   const [startAndEndDates, setStartAndEndDates] = useState<
     DateRange | undefined
   >();
-
-  const [emailsToInvite, setEmailsToInvite] = useState([
-    "valentimgarcia@gmail.com",
-  ]);
+  const [emailsToInvite, setEmailsToInvite] = useState<string[]>([]);
+  const [isDuplicateEmail, setIsDuplicateEmail] = useState(false);  
 
   function openGuestsInput() {
     setIsGuestsInputOpen(true);
@@ -59,9 +57,11 @@ export default function CreateTripPage() {
     }
 
     if (emailsToInvite.includes(email)) {
+      setIsDuplicateEmail(true);
       return;
     }
 
+    setIsDuplicateEmail(false);
     setEmailsToInvite([...emailsToInvite, email]);
     event.currentTarget.reset();
   }
@@ -151,12 +151,15 @@ export default function CreateTripPage() {
           addNewEmailToInvite={addNewEmailToInvite}
           closeGuestsModal={closeGuestsModal}
           removeEmailFromInvites={removeEmailFromInvites}
+          isDuplicateEmail={isDuplicateEmail}
         />
       )}
 
       {isConfirmTripModalOpen && (
         <ConfirmTripModal
           closeConfirmTripModal={closeConfirmTripModal}
+          destination={destination}
+          startAndEndDates={startAndEndDates}
           createTrip={createTrip}
           ownerName={ownerName}
           setOwnerName={setOwnerName}

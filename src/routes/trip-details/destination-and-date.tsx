@@ -1,33 +1,22 @@
-import { Calendar, MapPin, Settings2 } from "lucide-react";
+import { Calendar, CirclePlus, MapPin } from "lucide-react";
+import { Trip } from ".";
 import { Button } from "../../components/button";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { api } from "../../lib/axios";
-import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
-interface Trip {
-  id: string;
-  destination: string;
-  starts_at: string;
-  ends_at: string;
-  is_confirmed: boolean;
+interface DestinationAndDateProps {
+  trip: Trip | undefined;
+  displayedDate: string | null;
 }
 
-export function DestinationAndDate() {
-  const { tripId } = useParams();
-  const [trip, setTrip] = useState<Trip | undefined>();
+export function DestinationAndDate({
+  trip,
+  displayedDate,
+}: DestinationAndDateProps) {
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    api.get(`trips/${tripId}`).then((response) => setTrip(response.data.trip));
-  }, [tripId]);
-
-  const displayedDate =
-    trip?.starts_at && trip?.ends_at
-      ? `${format(trip?.starts_at, "LLL do")} to ${format(
-          trip?.ends_at,
-          "LLL do"
-        )}`
-      : null;
+  function redirectToCreateTrip() {
+    navigate("/");
+  }
 
   return (
     <div className="px-4 h-16 rounded-xl bg-zinc-900 shadow-shape flex items-center justify-between">
@@ -44,9 +33,9 @@ export function DestinationAndDate() {
 
         <div className="w-px h-6 bg-zinc-800" />
 
-        <Button variant="secondary">
-          <Settings2 className="size-5" />
-          Change place/date
+        <Button variant="secondary" onClick={redirectToCreateTrip}>
+          <CirclePlus className="size-5" />
+          Create new trip
         </Button>
       </div>
     </div>

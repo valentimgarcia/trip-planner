@@ -1,9 +1,13 @@
 import { User, X } from "lucide-react";
 import { FormEvent } from "react";
 import { Button } from "../../components/button";
+import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
 
 interface ConfirmTripModalProps {
   closeConfirmTripModal: () => void;
+  destination: string;
+  startAndEndDates: DateRange | undefined;
   createTrip: (event: FormEvent<HTMLFormElement>) => void;
   ownerName: string;
   ownerEmail: string;
@@ -13,12 +17,22 @@ interface ConfirmTripModalProps {
 
 export function ConfirmTripModal({
   closeConfirmTripModal,
+  destination,
+  startAndEndDates,
   createTrip,
   ownerName,
   setOwnerName,
   ownerEmail,
   setOwnerEmail,
 }: ConfirmTripModalProps) {
+  const displayedDate =
+    startAndEndDates && startAndEndDates.from && startAndEndDates.to
+      ? `${format(startAndEndDates.from, "LLL do")} to ${format(
+          startAndEndDates.to,
+          "LLL do"
+        )}`
+      : null;
+
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
       <div className="w-[640px] rounded-xl py-5 px-6 shadow-shape bg-zinc-900 space-y-5">
@@ -30,14 +44,10 @@ export function ConfirmTripModal({
         </div>
         <p className="text-sm text-zinc-400 mt-2">
           To complete your trip to{" "}
-          <span className="font-semibold text-zinc-100">
-            Florianópolis, Brazil
-          </span>{" "}
+          <span className="font-semibold text-zinc-100">{destination}</span>{" "}
           from{" "}
-          <span className="font-semibold text-zinc-100">
-            August 16 to 27 of 2024
-          </span>
-          , please fill in your details below:
+          <span className="font-semibold text-zinc-100">{displayedDate}</span>,
+          please fill in your details below:
         </p>
 
         <form onSubmit={createTrip} className="space-y-3">

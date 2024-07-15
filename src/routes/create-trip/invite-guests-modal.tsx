@@ -7,6 +7,7 @@ interface InviteGuestsModalProps {
   emailsToInvite: string[];
   addNewEmailToInvite: (event: FormEvent<HTMLFormElement>) => void;
   removeEmailFromInvites: (email: string) => void;
+  isDuplicateEmail: boolean;
 }
 
 export function InviteGuestsModal({
@@ -14,6 +15,7 @@ export function InviteGuestsModal({
   closeGuestsModal,
   emailsToInvite,
   removeEmailFromInvites,
+  isDuplicateEmail
 }: InviteGuestsModalProps) {
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
@@ -67,6 +69,11 @@ export function InviteGuestsModal({
             <Plus className="size-5 text-lime-950" />
           </Button>
         </form>
+        {isDuplicateEmail && (
+          <p className="text-sm text-red-700 !mt-1 ml-0.5">
+            Guest email already invited.
+          </p>
+        )}
       </div>
     </div>
   );
