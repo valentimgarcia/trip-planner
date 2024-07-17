@@ -1,4 +1,4 @@
-# Trip Plann.er (React)
+# Trip Plann.er (React & NodeJs)
 
 ### Check it out for yourself:
 https://test <br><br>
