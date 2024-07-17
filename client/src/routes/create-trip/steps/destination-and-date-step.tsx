@@ -111,7 +111,7 @@ export function DestinationAndDateStep({
       ) : (
         <Button
           onClick={openGuestsInput}
-          disabled={destination.length <= 3}
+          disabled={destination.length <= 3 || !displayedDate}
           variant="primary"
         >
           Continue
