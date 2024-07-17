@@ -7,6 +7,7 @@ import { getMailClient } from '../lib/mail'
 import { dayjs } from '../lib/dayjs'
 import { ClientError } from '../errors/client-error'
 import { env } from '../env'
+import {addDays} from 'date-fns'
 
 export async function createTrip(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -24,7 +25,7 @@ export async function createTrip(app: FastifyInstance) {
       },
     },
     async (request) => {
-      const {
+      let {
         destination,
         starts_at,
         ends_at,
@@ -40,6 +41,9 @@ export async function createTrip(app: FastifyInstance) {
       if (dayjs(ends_at).isBefore(starts_at)) {
         throw new ClientError('Invalid trip end date.')
       }
+
+      starts_at = addDays(starts_at, 1)
+      ends_at = addDays(ends_at, 1)
 
       const trip = await prisma.trip.create({
         data: {

@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { prisma } from '../lib/prisma'
 import { dayjs } from '../lib/dayjs'
 import { ClientError } from '../errors/client-error'
+import {addDays} from 'date-fns'
 
 export async function createActivity(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -30,6 +31,8 @@ export async function createActivity(app: FastifyInstance) {
       if (!trip) {
         throw new ClientError('Trip not found')
       }
+
+      trip.ends_at = addDays(trip.ends_at, 1)
 
       if (dayjs(occurs_at).isBefore(trip.starts_at)) {
         throw new ClientError('Invalid activity date.')
